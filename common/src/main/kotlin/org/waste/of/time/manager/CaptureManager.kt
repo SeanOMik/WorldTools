@@ -82,7 +82,9 @@ object CaptureManager {
         MessageManager.sendInfo("worldtools.log.info.started_capture", potentialName)
         if (config.debug.logSettings) logCaptureSettingsState()
         storeJob = StorageFlow.launch(potentialName)
-        mc.networkHandler?.sendPacket(ClientStatusC2SPacket(ClientStatusC2SPacket.Mode.REQUEST_STATS))
+        // TODO:This line causes a crash with this error:
+        //  java.lang.NoSuchMethodError: 'void net.minecraft.client.network.ClientPlayNetworkHandler.sendPacket(net.minecraft.network.packet.Packet)'
+        // mc.networkHandler?.sendPacket(ClientStatusC2SPacket(ClientStatusC2SPacket.Mode.REQUEST_STATS))
         capturing = true
 
         // Need to wait until the storage flow is running before syncing the cache

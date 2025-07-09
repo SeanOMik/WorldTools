@@ -81,7 +81,8 @@ object HotCache {
 
         // failing to reset this could cause users to accidentally save their echest contents on subsequent captures
         if (!mc.isInSingleplayer && !config.advanced.keepEnderChestContents) {
-            mc.player?.enderChestInventory = EnderChestInventory()
+            // TODO: causes IllegalAccessException when joining a world in ATM10
+            // mc.player?.enderChestInventory = EnderChestInventory()
         }
         lastInteractedBlockEntity = null
         LOG.info("Cleared hot cache")

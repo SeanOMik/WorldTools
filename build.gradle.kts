@@ -1,10 +1,11 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import net.fabricmc.loom.task.RemapJarTask
+import net.fabricmc.loom.api.LoomGradleExtensionAPI
 
 plugins {
     kotlin("jvm") version ("2.0.21")
     id("architectury-plugin") version "3.4-SNAPSHOT"
-    id("dev.architectury.loom") version "1.7-SNAPSHOT" apply false
+    id("dev.architectury.loom") version "1.10-SNAPSHOT" apply false
     id("com.github.johnrengelman.shadow") version "8.1.1" apply false
 }
 
@@ -14,9 +15,15 @@ architectury {
 
 subprojects {
     apply(plugin = "dev.architectury.loom")
+
+    val loom = project.extensions.getByName<LoomGradleExtensionAPI>("loom")
+
     dependencies {
         "minecraft"("com.mojang:minecraft:${project.properties["minecraft_version"]!!}")
-        "mappings"("net.fabricmc:yarn:${project.properties["yarn_mappings"]}:v2")
+        "mappings"(loom.layered() {
+            mappings("net.fabricmc:yarn:${project.properties["yarn_mappings"]}:v2")
+            mappings("dev.architectury:yarn-mappings-patch-neoforge:${project.properties["yarn_mappings_patch_neoforge_version"]}")
+        })
     }
     if (path != ":common") {
         apply(plugin = "com.github.johnrengelman.shadow")
